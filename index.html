@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Star Collector - Telegram Mini App</title>
+    <meta name="description" content="Collect stars and earn coins in this fun Telegram Mini App game!" />
+    <meta name="keywords" content="telegram, mini app, game, stars, coins, collector" />
+    <meta name="author" content="Star Collector Team" />
+    
+    <!-- Telegram Mini App specific meta tags -->
+    <meta name="telegram:card" content="app" />
+    <meta name="telegram:site" content="@your_bot_username" />
+    <meta name="telegram:title" content="Star Collector" />
+    <meta name="telegram:description" content="Collect stars and earn coins!" />
+    
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+      html, body, #root {
+        height: 100%;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Make app globally accessible for debugging -->
+    <script>
+      window.addEventListener('load', () => {
+        console.log('🌟 Star Collector Mini App loaded!')
+        
+        // Debug info
+        if (window.Telegram?.WebApp) {
+          console.log('📱 Telegram WebApp detected:', window.Telegram.WebApp.version)
+        } else {
+          console.log('🔧 Running in demo mode')
+        }
+      })
+    </script>
+  </body>
+</html>
