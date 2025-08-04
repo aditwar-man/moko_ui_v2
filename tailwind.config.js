@@ -5,12 +5,20 @@ export default {
     extend: {
       keyframes: {
         fall: {
-          '0%': { top: '-40px', opacity: '1' },
-          '100%': { top: '100%', opacity: '0' },
+          '0%': {
+            top: '-10%',
+            transform: 'translateY(0) rotate(0deg)',
+            opacity: '1', // <- pastikan tetap 1
+          },
+          '100%': {
+            top: '100%',
+            transform: 'translateY(200px) rotate(180deg)',
+            opacity: '1', // <- tetap solid
+          },
         },
       },
       animation: {
-        fall: 'fall linear',
+        fall: 'fall linear infinite',
       },
     },
   },

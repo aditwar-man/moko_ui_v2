@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface RewardItem {
   id: number;
@@ -7,8 +7,8 @@ interface RewardItem {
 }
 
 interface RewardGridProps {
-  rewards: RewardItem[];
-  onRewardClick: (id: number, event?: React.MouseEvent) => void;
+  rewards?: RewardItem[];
+  onRewardClick?: (id: number, event?: React.MouseEvent) => void;
 }
 
 interface FallingReward {
@@ -18,71 +18,83 @@ interface FallingReward {
   duration: number;
 }
 
-const RewardGrid: React.FC<RewardGridProps> = ({  }) => {
+const RewardGrid: React.FC<RewardGridProps> = () => {
   const [fallingRewards, setFallingRewards] = useState<FallingReward[]>([]);
+  const gridRef = useRef<HTMLDivElement>(null);
 
-  // ✨ Efek bintang ketika reward diklik
+  // Bintang jatuh ke tengah
   const spawnStarFall = (element: HTMLElement) => {
+    if (!gridRef.current) return;
+
+    const grid = gridRef.current;
+    const gridRect = grid.getBoundingClientRect();
+    const elementRect = element.getBoundingClientRect();
+
     const star = document.createElement('div');
-    star.className = 'absolute w-4 h-4 bg-yellow-400 rounded-full shadow-lg animate-fall';
-    const rect = element.getBoundingClientRect();
-    star.style.left = `${rect.left + rect.width / 2}px`;
-    star.style.top = `${rect.top}px`;
-    document.body.appendChild(star);
+    star.className = 'absolute w-4 h-4 bg-yellow-400 rounded-full animate-fall pointer-events-none';
+    star.style.left = `${elementRect.left - gridRect.left + elementRect.width / 2}px`;
+    star.style.top = `${elementRect.top - gridRect.top}px`;
+
+    grid.appendChild(star);
     setTimeout(() => star.remove(), 3000);
   };
 
-  // 💫 Fungsi memunculkan 1 reward jatuh
   const spawnFallingReward = () => {
-    const rewardValues = [110, 330, 880, 385, 220, 352, 220, 275, 407, 110];
+    const rewardValues = [110, 330, 880, 385, 220, 352, 275, 407];
     const value = rewardValues[Math.floor(Math.random() * rewardValues.length)];
     const id = Date.now() + Math.random();
-    const left = Math.random() * 90; // posisinya acak
-    const duration = Math.random() * 5 + 5; // durasi 5–10 detik
+    const left = Math.random() * 90;
+    const duration = Math.random() * 5 + 5;
 
     setFallingRewards((prev) => [...prev, { id, value, left, duration }]);
 
-    // ⏱️ Hapus setelah selesai animasi
     setTimeout(() => {
       setFallingRewards((prev) => prev.filter((r) => r.id !== id));
     }, duration * 1000);
   };
 
-  // ⏲️ Auto spawn tiap 1 detik
   useEffect(() => {
     const interval = setInterval(spawnFallingReward, 1000);
     return () => clearInterval(interval);
   }, []);
 
   const handleFallingRewardClick = (id: number, value: number) => {
-    const center = document.createElement('div');
-    center.style.position = 'absolute';
-    center.style.left = '50%';
-    center.style.top = '50%';
-    center.style.transform = 'translate(-50%, -50%)';
-    document.body.appendChild(center);
-    spawnStarFall(center);
-    center.remove();
+    if (!gridRef.current) return;
+
+    const dummyCenter = document.createElement('div');
+    dummyCenter.style.position = 'absolute';
+    dummyCenter.style.left = '50%';
+    dummyCenter.style.top = '50%';
+    dummyCenter.style.transform = 'translate(-50%, -50%)';
+
+    gridRef.current.appendChild(dummyCenter);
+    spawnStarFall(dummyCenter);
+    dummyCenter.remove();
 
     setFallingRewards((prev) => prev.filter((r) => r.id !== id));
   };
 
   return (
-    <div className="relative w-full h-screen bg-cover bg-no-repeat bg-center" style={{ backgroundImage: `url('/bg3.png')` }}>
-      {/* Reward jatuh dari atas */}
-      {fallingRewards.map((reward) => (
-        <div
-          key={reward.id}
-          className="absolute w-8 h-8 cursor-pointer z-50"
-          style={{
-            left: `${reward.left}%`,
-            animation: `fall linear ${reward.duration}s`,
-          }}
-          onClick={() => handleFallingRewardClick(reward.id, reward.value)}
-        >
-          <div className="diamond w-8 h-8 bg-yellow-400 rounded-full shadow-md border-2 border-white"></div>
-        </div>
-      ))}
+    <div className="relative w-full h-full flex justify-center px-4">
+      <div
+        ref={gridRef}
+        className="relative w-full max-w-[700px] h-[400px] p-4 rounded-xl shadow-md bg-white/10 overflow-hidden"
+      >
+        {/* Bintang-bintang jatuh */}
+        {fallingRewards.map((reward) => (
+          <div
+            key={reward.id}
+            className="absolute w-8 h-8 z-50"
+            style={{
+              left: `${reward.left}%`,
+              animation: `fall ${reward.duration}s linear`,
+            }}
+            onClick={() => handleFallingRewardClick(reward.id, reward.value)}
+          >
+            <div className="diamond w-8 h-8" />
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

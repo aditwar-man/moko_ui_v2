@@ -42,26 +42,69 @@ function App() {
   };
 
   return (
-    <div className="h-screen w-full overflow-hidden flex flex-col">
-      {/* Header */}
-      <Header
-        totalCoins={totalCoins}
-        totalStars={totalStars}
-        currentLevelStars={currentLevelStars}
-        progressPercent={progressPercent}
-        showDropdown={showDropdown}
-        onToggleDropdown={handleToggleDropdown}
-        onNavigate={handleNavigate}
+    <div className="relative w-screen h-screen overflow-hidden">
+      {/* Background Image */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
+        style={{ backgroundImage: "url('/bg4.png')" }}
       />
 
-      {/* Main Game Area */}
-      <div className="flex-1 flex flex-col justify-between bg-[#272932] overflow-hidden">
+      {/* Layer atas semua konten */}
+      <div className="relative z-10 flex flex-col h-full">
+        {/* Header */}
+        <Header
+          totalCoins={totalCoins}
+          totalStars={totalStars}
+          currentLevelStars={currentLevelStars}
+          progressPercent={progressPercent}
+          showDropdown={showDropdown}
+          onToggleDropdown={handleToggleDropdown}
+          onNavigate={handleNavigate}
+        />
+
+        {/* Main Game Area */}
+        <div className="flex-1 flex flex-col justify-between">
+          {activeTab === 'earn' && (
+            <div className='mt-4'>
+              <RewardGrid
+                rewards={rewards}
+                onRewardClick={(id) => collectReward(id)}
+              />
+            </div>
+          )}
+
+          {activeTab === 'tasks' && (
+            <div className="p-6 text-center text-white/70">
+              <h2 className="text-2xl font-bold mb-4 text-white">Tasks</h2>
+              Complete tasks to earn more rewards!
+            </div>
+          )}
+
+          {activeTab === 'friends' && (
+            <div className="p-6 text-center text-white/70">
+              <h2 className="text-2xl font-bold mb-4 text-white">Friends</h2>
+              Invite friends to get bonus rewards!
+            </div>
+          )}
+
+          {activeTab === 'upgrade' && (
+            <div className="p-6 text-center text-white/70">
+              <h2 className="text-2xl font-bold mb-4 text-white">Upgrade</h2>
+              Upgrade your tools for better rewards!
+            </div>
+          )}
+
+          {activeTab === 'profile' && (
+            <div className="p-6 text-center text-white/70">
+              <h2 className="text-2xl font-bold mb-4 text-white">Profile</h2>
+              View your stats and achievements!
+            </div>
+          )}
+        </div>
+
+        {/* Booster Cards */}
         {activeTab === 'earn' && (
-          <>
-            <RewardGrid
-              rewards={rewards}
-              onRewardClick={(id) => collectReward(id)}
-            />
+          <div className="fixed bottom-4 left-0 w-full flex justify-center gap-4 z-50 px-4">
             <BoosterCards
               autoCollectorActive={autoCollectorActive}
               autoCollectorTimeLeft={autoCollectorTimeLeft}
@@ -72,43 +115,15 @@ function App() {
               onToggleBooster={toggleBooster}
               onToggleConveyor={handleToggleConveyor}
             />
-          </>
-        )}
-
-        {activeTab === 'tasks' && (
-          <div className="p-6 text-center">
-            <h2 className="text-2xl font-bold mb-4">Tasks</h2>
-            <p className="text-white/70">Complete tasks to earn more rewards!</p>
           </div>
         )}
 
-        {activeTab === 'friends' && (
-          <div className="p-6 text-center">
-            <h2 className="text-2xl font-bold mb-4">Friends</h2>
-            <p className="text-white/70">Invite friends to get bonus rewards!</p>
-          </div>
-        )}
-
-        {activeTab === 'upgrade' && (
-          <div className="p-6 text-center">
-            <h2 className="text-2xl font-bold mb-4">Upgrade</h2>
-            <p className="text-white/70">Upgrade your tools for better rewards!</p>
-          </div>
-        )}
-
-        {activeTab === 'profile' && (
-          <div className="p-6 text-center">
-            <h2 className="text-2xl font-bold mb-4">Profile</h2>
-            <p className="text-white/70">View your stats and achievements!</p>
-          </div>
-        )}
+        {/* Floating Coins Animation */}
+        <FloatingCoins
+          coins={floatingCoins}
+          onAnimationComplete={removeFloatingCoin}
+        />
       </div>
-
-      {/* Floating Coins Animation */}
-      <FloatingCoins
-        coins={floatingCoins}
-        onAnimationComplete={removeFloatingCoin}
-      />
     </div>
   );
 }

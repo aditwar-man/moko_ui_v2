@@ -17,14 +17,37 @@
   }
 }
 
+.diamond {
+  width: 50px;
+  height: 50px;
+  background-image: url('../public/bintang.png');
+  /* transform: rotate(45deg); */
+  /* border: 2px solid #DAA520; */
+  /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  clip-path: polygon(
+    50% 0%,
+    100% 50%,
+    50% 100%,
+    0% 50%
+  );
+  animation: pulse 2s infinite;
+}
+
+
 @keyframes fall {
   0% {
-    top: -40px;
+    top: -10%;
+    transform: translateY(0);
     opacity: 1;
   }
   100% {
     top: 100%;
-    opacity: 0;
+    transform: translateY(200px) rotate(180deg);
+    opacity: 1; /* <-- Ubah jadi 1 */
   }
 }
 
