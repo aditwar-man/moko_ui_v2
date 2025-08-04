@@ -1,15 +1,58 @@
 import React from 'react';
-import { RotateCcw, Zap, TrendingUp } from 'lucide-react';
+import { cn } from '../lib/utils';
+import {
+  MousePointerClick,
+  Percent,
+  FastForward,
+} from 'lucide-react';
 
-interface BoosterCard {
+interface BoosterCardProps {
   id: string;
   title: string;
-  description: string;
-  Icon: React.FC<{ className?: string }>;
-  timeRemaining: string;
+  icon: React.ReactNode;
+  time: string;
   isActive: boolean;
-  bgColor: string;
+  gradient: string;
+  onClick: () => void;
 }
+
+const BoosterCard: React.FC<BoosterCardProps> = ({
+  title,
+  icon,
+  time,
+  isActive,
+  gradient,
+  onClick,
+}) => {
+  return (
+    <button
+      onClick={onClick}
+      disabled={isActive}
+      className={cn(
+        'relative rounded-2xl h-32 w-full p-2 flex flex-col items-center justify-center text-center transition-all duration-200 overflow-hidden',
+        gradient,
+        isActive ? 'cursor-not-allowed grayscale opacity-70' : 'hover:scale-[1.05] active:scale-95'
+      )}
+    >
+      {/* Icon */}
+      <div className="w-10 h-10 mb-2">
+        {icon}
+      </div>
+
+      {/* Title */}
+      <div className="text-xs font-bold text-black bg-white/80 rounded-full px-3 py-[2px] shadow-inner">
+        {title}
+      </div>
+
+      {/* Time */}
+      {time && (
+        <div className="text-[11px] mt-1 font-semibold text-gray-700 bg-white/60 px-2 py-[1px] rounded-full shadow-sm">
+          {time}
+        </div>
+      )}
+    </button>
+  );
+};
 
 interface BoosterCardsProps {
   autoCollectorActive: boolean;
@@ -30,82 +73,49 @@ const BoosterCards: React.FC<BoosterCardsProps> = ({
   formatTime,
   onToggleAutoCollector,
   onToggleBooster,
-  onToggleConveyor
+  onToggleConveyor,
 }) => {
-  const boosters: BoosterCard[] = [
+  const multiplierValue = 2.5; // bisa dari props/state
+
+  const boosters = [
     {
       id: 'auto-collector',
-      title: 'Auto-Collector',
-      description: '',
-      Icon: RotateCcw,
-      timeRemaining: autoCollectorActive ? `${formatTime(autoCollectorTimeLeft)} remaining` : '',
+      title: 'Auto Collect',
+      icon: <MousePointerClick className="w-full h-full" color="#facc15" strokeWidth={2.5} />,
+      time: autoCollectorActive ? formatTime(autoCollectorTimeLeft) : '',
       isActive: autoCollectorActive,
-      bgColor: 'bg-sky-700'
+      gradient: 'bg-gradient-to-br from-yellow-100 via-yellow-200 to-amber-200',
+      onClick: onToggleAutoCollector,
     },
     {
       id: 'shard-multiplier',
       title: 'Multiplier',
-      description: '',
-      Icon: Zap,
-      timeRemaining: boosterActive ? `${formatTime(boosterTimeLeft)} remaining` : '',
+      icon: (
+        <div className="text-xl font-black text-purple-600 drop-shadow-md">
+          {multiplierValue}x
+        </div>
+      ),
+      time: boosterActive ? formatTime(boosterTimeLeft) : '',
       isActive: boosterActive,
-      bgColor: 'bg-pink-500'
+      gradient: 'bg-gradient-to-br from-pink-100 via-fuchsia-200 to-violet-200',
+      onClick: onToggleBooster,
     },
     {
       id: 'conveyor-booster',
-      title: 'Speed',
-      description: '',
-      Icon: TrendingUp,
-      timeRemaining: '6m 46s remaining',
+      title: 'Faster Drops',
+      icon: <FastForward className="w-full h-full" color="#38bdf8" strokeWidth={2.5} />,
+      time: '6m 46s',
       isActive: false,
-      bgColor: 'bg-sky-600'
-    }
+      gradient: 'bg-gradient-to-br from-blue-100 via-sky-200 to-indigo-200',
+      onClick: onToggleConveyor,
+    },
   ];
 
-  const handleBoosterClick = (id: string) => {
-    switch (id) {
-      case 'auto-collector':
-        onToggleAutoCollector();
-        break;
-      case 'shard-multiplier':
-        onToggleBooster();
-        break;
-      case 'conveyor-booster':
-        onToggleConveyor();
-        break;
-    }
-  };
-
   return (
-    <div className="px-6 pb-4">
-      <div className="grid grid-cols-3 gap-3">
+    <div className="px-3 pb-6 mt-2">
+      <div className="grid grid-cols-3 gap-4">
         {boosters.map((booster) => (
-          <button
-            key={booster.id}
-            onClick={() => handleBoosterClick(booster.id)}
-            disabled={booster.isActive}
-            className={`
-              relative overflow-hidden
-              h-32 w-full
-              p-4 rounded-xl ${booster.bgColor}
-              hover:shadow-lg transform hover:scale-[1.02] transition-all duration-200
-              ${booster.isActive ? 'opacity-75 cursor-not-allowed' : 'hover:brightness-110'}
-            `}
-          >
-            {/* Icon as background */}
-            <booster.Icon className="absolute opacity-20 w-20 h-20 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white" />
-
-            {/* Content layer */}
-            <div className="relative z-10 text-center flex flex-col items-center">
-              <h3 className="text-white font-bold text-sm mb-1">{booster.title}</h3>
-              <p className="text-white/80 text-xs mb-1">{booster.description}</p>
-              <span className={`text-xs font-medium ${
-                booster.isActive ? 'text-yellow-300' : 'text-white/90'
-              }`}>
-                {booster.timeRemaining}
-              </span>
-            </div>
-          </button>
+          <BoosterCard key={booster.id} {...booster} />
         ))}
       </div>
     </div>

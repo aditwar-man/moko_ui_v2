@@ -78,7 +78,7 @@ const RewardGrid: React.FC<RewardGridProps> = () => {
     <div className="relative w-full h-full flex justify-center px-4">
       <div
         ref={gridRef}
-        className="relative w-full max-w-[700px] h-[400px] p-4 rounded-xl shadow-md bg-white/10 overflow-hidden"
+        className="relative w-full max-w-[700px] h-[65vh] p-4 rounded-xl overflow-hidden"
       >
         {/* Bintang-bintang jatuh */}
         {fallingRewards.map((reward) => (
