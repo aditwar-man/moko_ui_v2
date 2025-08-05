@@ -35,7 +35,7 @@ const Header: React.FC<HeaderProps> = ({
         {/* Coins */}
         <div className="flex items-center gap-2 bg-stone-950 rounded-full px-2 py-1">
           <img
-              src="../../public/bintang.png"
+              src="/bintang.png"
               alt="Moko"
               className="w-6 h-6 object-contain"
             />
@@ -49,7 +49,7 @@ const Header: React.FC<HeaderProps> = ({
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-2 bg-stone-950 rounded-full px-2 py-1">
             <img
-              src="../../public/icon_moko.png"
+              src="/icon_moko.png"
               alt="Moko"
               className="w-6 h-6 object-contain"
             />

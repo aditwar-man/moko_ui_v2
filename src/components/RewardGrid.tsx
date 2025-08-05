@@ -31,7 +31,7 @@ const RewardGrid: React.FC<RewardGridProps> = () => {
     const elementRect = element.getBoundingClientRect();
 
     const star = document.createElement('div');
-    star.className = 'absolute w-4 h-4 bg-yellow-400 rounded-full animate-fall pointer-events-none';
+    star.className = 'absolute w-4 h-4 rounded-full animate-fall pointer-events-none';
     star.style.left = `${elementRect.left - gridRect.left + elementRect.width / 2}px`;
     star.style.top = `${elementRect.top - gridRect.top}px`;
 
@@ -65,6 +65,7 @@ const RewardGrid: React.FC<RewardGridProps> = () => {
     dummyCenter.style.position = 'absolute';
     dummyCenter.style.left = '50%';
     dummyCenter.style.top = '50%';
+    dummyCenter.style.backgroundColor = 'transparent';
     dummyCenter.style.transform = 'translate(-50%, -50%)';
 
     gridRef.current.appendChild(dummyCenter);
