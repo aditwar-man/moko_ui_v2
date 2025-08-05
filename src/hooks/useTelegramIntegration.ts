@@ -79,7 +79,7 @@ export const useTelegramIntegration = () => {
         
         // Configure the app
         tg.expand();
-        tg.setHeaderColor('#272932');
+        tg.setHeaderColor('#193f65');
         tg.setBackgroundColor('#272932');
         tg.BackButton.hide();
         tg.enableClosingConfirmation();
