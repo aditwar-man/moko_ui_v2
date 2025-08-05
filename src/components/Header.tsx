@@ -28,12 +28,12 @@ const Header: React.FC<HeaderProps> = ({
   ];
 
   return (
-    <div className="bg-[#272932] p-4 shadow-lg relative z-50">
+    <div className="bg-shadow p-4 shadow-lg relative z-50">
       {/* Top Header: Stats & Menu */}
       <div className="flex justify-between items-center">
         
         {/* Coins */}
-        <div className="flex items-center gap-2 bg-stone-950 rounded-full px-2 py-1">
+        <div className="flex items-center gap-2 bg-gray-800 rounded-full px-2 py-1">
           <img
               src="/bintang.png"
               alt="Moko"
@@ -47,7 +47,7 @@ const Header: React.FC<HeaderProps> = ({
 
         {/* Stars + Menu */}
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-2 bg-stone-950 rounded-full px-2 py-1">
+          <div className="flex items-center gap-2 bg-gray-800 rounded-full px-2 py-1">
             <img
               src="/icon_moko.png"
               alt="Moko"
