@@ -22,8 +22,6 @@ const FloatingCoins: React.FC<FloatingCoinsProps> = ({ coins, onAnimationComplet
           style={{
             left: coin.x,
             top: coin.y,
-            animationDuration: '1.5s',
-            animationFillMode: 'forwards'
           }}
           onAnimationEnd={() => onAnimationComplete(coin.id)}
         >

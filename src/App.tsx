@@ -4,6 +4,7 @@ import RewardGrid from './components/RewardGrid';
 import BoosterCards from './components/BoosterCards';
 import FloatingCoins from './components/FloatingCoins';
 import { useGameState } from './hooks/useGameState';
+import WindEffect from './components/WindEffect';
 
 function App() {
   const {
@@ -17,14 +18,18 @@ function App() {
     floatingCoins,
     boosterActive,
     autoCollectorActive,
+    speedDropActive,
+    speedDropTimeLeft,
     boosterTimeLeft,
     autoCollectorTimeLeft,
     showDropdown,
+    speedDuration,
     setShowDropdown,
     collectReward,
     removeFloatingCoin,
     toggleBooster,
     toggleAutoCollector,
+    toggleSpeedDrop,
     formatTimeRemaining
   } = useGameState();
 
@@ -34,11 +39,6 @@ function App() {
 
   const handleNavigate = (tab: string) => {
     setActiveTab(tab);
-  };
-
-  const handleToggleConveyor = () => {
-    console.log('Conveyor booster activated!');
-    // Implement conveyor booster logic here
   };
 
   return (
@@ -68,7 +68,8 @@ function App() {
             <div className='mt-4'>
               <RewardGrid
                 rewards={rewards}
-                onRewardClick={(id) => collectReward(id)}
+                speedDrop={speedDuration}
+                onRewardClick={(id, event) => collectReward(id, event)}
               />
             </div>
           )}
@@ -108,15 +109,19 @@ function App() {
             <BoosterCards
               autoCollectorActive={autoCollectorActive}
               autoCollectorTimeLeft={autoCollectorTimeLeft}
+              speedDropActive={speedDropActive}
+              speedDropTimeLeft={speedDropTimeLeft}
               boosterActive={boosterActive}
               boosterTimeLeft={boosterTimeLeft}
               formatTime={formatTimeRemaining}
               onToggleAutoCollector={toggleAutoCollector}
               onToggleBooster={toggleBooster}
-              onToggleConveyor={handleToggleConveyor}
+              onToggleConveyor={toggleSpeedDrop}
             />
           </div>
         )}
+
+        {/* {speedDropActive && <WindEffect />} */}
 
         {/* Floating Coins Animation */}
         <FloatingCoins

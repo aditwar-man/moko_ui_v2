@@ -19,6 +19,7 @@ export const useGameState = () => {
   
   const [totalCoins, setTotalCoins] = useState(0);
   const [totalStars, setTotalStars] = useState(0);
+  const [speedDuration, setSpeedDuration] = useState(1);
   const [currentLevelStars, setCurrentLevelStars] = useState(11855);
   const [targetLevelStars, setTargetLevelStars] = useState(100000);
   const [level, setLevel] = useState(1);
@@ -27,8 +28,10 @@ export const useGameState = () => {
   const [floatingCoins, setFloatingCoins] = useState<FloatingCoin[]>([]);
   const [boosterActive, setBoosterActive] = useState(false);
   const [autoCollectorActive, setAutoCollectorActive] = useState(false);
+  const [speedDropActive, setSpeedDropActive] = useState(false);
   const [boosterTimeLeft, setBoosterTimeLeft] = useState(0);
   const [autoCollectorTimeLeft, setAutoCollectorTimeLeft] = useState(600); // 10 minutes
+  const [speedDropTimeLeft, setSpeedDropTimeLeft] = useState(600); // 10 minutes
   const [boosterMultiplier, setBoosterMultiplier] = useState(1);
   const [isInitialized, setIsInitialized] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -38,11 +41,11 @@ export const useGameState = () => {
   
   // Initialize rewards with the same values as original
   const [rewards, setRewards] = useState<RewardItem[]>(() => {
-    const rewardValues = [960, 9770, 960, 862, 9770, 960, 9770, 960, 862, 9770, 960, 9770, 960, 862, 9770];
+    const rewardValues = [110, 330, 880, 385, 220, 352, 220, 275, 407, 110];
     return rewardValues.map((value, index) => ({
       id: index,
       value,
-      collected: false
+      collected: false,
     }));
   });
 
@@ -91,7 +94,7 @@ export const useGameState = () => {
 
   // Auto-save every 30 seconds
   useEffect(() => {
-    const interval = setInterval(saveGameProgress, 30000);
+    const interval = setInterval(saveGameProgress, 300000);
     
     const handleBeforeUnload = () => saveGameProgress();
     window.addEventListener('beforeunload', handleBeforeUnload);
@@ -125,6 +128,19 @@ export const useGameState = () => {
         }
       }
 
+      if (speedDropActive && speedDropTimeLeft > 0) {
+        setSpeedDuration(2)
+        setSpeedDropTimeLeft(prev => {
+          const newTime = Math.max(0, prev - deltaTime);
+          if (newTime <= 0) {
+            setSpeedDropActive(false);
+          }
+          return newTime;
+        });
+      } else {
+        setSpeedDuration(1); // <- reset kembali ke normal
+      }
+
       // Booster timer
       if (boosterTimeLeft > 0) {
         setBoosterTimeLeft(prev => {
@@ -138,7 +154,7 @@ export const useGameState = () => {
     }, 1000);
 
     return () => clearInterval(gameLoop);
-  }, [autoCollectorActive, autoCollectorTimeLeft, boosterTimeLeft]);
+  }, [autoCollectorActive, autoCollectorTimeLeft, boosterTimeLeft, speedDropActive]);
 
   // Level up logic
   const checkLevelUp = useCallback(() => {
@@ -158,14 +174,9 @@ export const useGameState = () => {
   }, [checkLevelUp]);
 
   const collectReward = useCallback((id: number, event?: React.MouseEvent) => {
-    const reward = rewards.find(r => r.id === id);
-    if (!reward || reward.collected) return;
-
-    // Random reward values like in original
-    const randValueReward = [110, 330, 880, 385, 220, 352, 220, 275, 407, 110];
-    const randomReward = randValueReward[Math.floor(Math.random() * randValueReward.length)];
+    const randomReward = rewards[Math.floor(Math.random() * rewards.length)];
     
-    const actualValue = Math.floor(randomReward * boosterMultiplier);
+    const actualValue = Math.floor(randomReward.value * boosterMultiplier);
 
     // Update reward as collected
     setRewards(prev => prev.map(r => 
@@ -217,6 +228,17 @@ export const useGameState = () => {
       console.log("🚀 Auto Collector started!");
     }
   }, [autoCollectorActive, telegram]);
+
+  const toggleSpeedDrop = useCallback(() => {
+    console.log(speedDropActive)
+    console.log(speedDropTimeLeft)
+    if (!speedDropActive) {
+      setSpeedDropActive(true);
+      setSpeedDropTimeLeft(600); // 10 minutes
+      telegram.hapticFeedback('success');
+      console.log("🚀 Speed Falling started!");
+    }
+  }, [speedDropActive, telegram])
 
   const showTasksMenu = useCallback(() => {
     const tasks = [
@@ -295,6 +317,7 @@ export const useGameState = () => {
     totalCoins,
     totalStars,
     currentLevelStars,
+    speedDuration,
     progressPercent,
     level,
     activeTab,
@@ -303,6 +326,8 @@ export const useGameState = () => {
     floatingCoins,
     boosterActive,
     autoCollectorActive,
+    speedDropActive,
+    speedDropTimeLeft,
     boosterTimeLeft,
     autoCollectorTimeLeft,
     showDropdown,
@@ -312,6 +337,7 @@ export const useGameState = () => {
     toggleBooster,
     toggleAutoCollector,
     formatTimeRemaining,
+    toggleSpeedDrop,
     telegram
   };
 };

@@ -56,7 +56,9 @@ const BoosterCard: React.FC<BoosterCardProps> = ({
 
 interface BoosterCardsProps {
   autoCollectorActive: boolean;
+  speedDropActive: boolean;
   autoCollectorTimeLeft: number;
+  speedDropTimeLeft: number;
   boosterActive: boolean;
   boosterTimeLeft: number;
   formatTime: (seconds: number) => string;
@@ -68,6 +70,8 @@ interface BoosterCardsProps {
 const BoosterCards: React.FC<BoosterCardsProps> = ({
   autoCollectorActive,
   autoCollectorTimeLeft,
+  speedDropActive,
+  speedDropTimeLeft,
   boosterActive,
   boosterTimeLeft,
   formatTime,
@@ -104,8 +108,8 @@ const BoosterCards: React.FC<BoosterCardsProps> = ({
       id: 'conveyor-booster',
       title: 'Faster Drops',
       icon: <FastForward className="w-full h-full" color="#38bdf8" strokeWidth={2.5} />,
-      time: '6m 46s',
-      isActive: false,
+      time: speedDropActive ? formatTime(speedDropTimeLeft) : '',
+      isActive: speedDropActive,
       gradient: 'bg-gradient-to-br from-blue-100 via-sky-200 to-indigo-200',
       onClick: onToggleConveyor,
     },

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useGameState } from '../hooks/useGameState';
 
 interface RewardItem {
   id: number;
@@ -8,91 +9,74 @@ interface RewardItem {
 
 interface RewardGridProps {
   rewards?: RewardItem[];
-  onRewardClick?: (id: number, event?: React.MouseEvent) => void;
+  speedDrop: number;
+  onRewardClick: (id: number, event: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 interface FallingReward {
-  id: number;
+  visualId: string;   // unik untuk React rendering
+  rewardId: number;   // id asli untuk logic reward
   value: number;
-  left: number; // in %
+  left: number;       // dalam persen
   duration: number;
 }
 
-const RewardGrid: React.FC<RewardGridProps> = () => {
+const RewardGrid: React.FC<RewardGridProps> = ({ rewards = [], speedDrop, onRewardClick }) => {
   const [fallingRewards, setFallingRewards] = useState<FallingReward[]>([]);
   const gridRef = useRef<HTMLDivElement>(null);
 
-  // Bintang jatuh ke tengah
-  const spawnStarFall = (element: HTMLElement) => {
-    if (!gridRef.current) return;
-
-    const grid = gridRef.current;
-    const gridRect = grid.getBoundingClientRect();
-    const elementRect = element.getBoundingClientRect();
-
-    const star = document.createElement('div');
-    star.className = 'absolute w-4 h-4 rounded-full animate-fall pointer-events-none';
-    star.style.left = `${elementRect.left - gridRect.left + elementRect.width / 2}px`;
-    star.style.top = `${elementRect.top - gridRect.top}px`;
-
-    grid.appendChild(star);
-    setTimeout(() => star.remove(), 3000);
-  };
-
   const spawnFallingReward = () => {
-    const rewardValues = [110, 330, 880, 385, 220, 352, 275, 407];
-    const value = rewardValues[Math.floor(Math.random() * rewardValues.length)];
-    const id = Date.now() + Math.random();
+    const reward = rewards[Math.floor(Math.random() * rewards.length)];
     const left = Math.random() * 90;
-    const duration = Math.random() * 5 + 5;
 
-    setFallingRewards((prev) => [...prev, { id, value, left, duration }]);
+    const baseDuration = 7 / speedDrop;
+    const duration = baseDuration * (0.8 + Math.random() * 0.4); // ±20%
+
+    const visualId = `${reward.id}-${Date.now()}-${Math.random()}`;
+
+    setFallingRewards(prev => [
+      ...prev,
+      {
+        visualId,
+        rewardId: reward.id,
+        value: reward.value,
+        left,
+        duration
+      }
+    ]);
 
     setTimeout(() => {
-      setFallingRewards((prev) => prev.filter((r) => r.id !== id));
+      setFallingRewards(prev => prev.filter(r => r.visualId !== visualId));
     }, duration * 1000);
   };
 
-  useEffect(() => {
-    const interval = setInterval(spawnFallingReward, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const handleFallingRewardClick = (id: number, value: number) => {
-    if (!gridRef.current) return;
-
-    const dummyCenter = document.createElement('div');
-    dummyCenter.style.position = 'absolute';
-    dummyCenter.style.left = '50%';
-    dummyCenter.style.top = '50%';
-    dummyCenter.style.backgroundColor = 'transparent';
-    dummyCenter.style.transform = 'translate(-50%, -50%)';
-
-    gridRef.current.appendChild(dummyCenter);
-    spawnStarFall(dummyCenter);
-    dummyCenter.remove();
-
-    setFallingRewards((prev) => prev.filter((r) => r.id !== id));
+  const handleFallingRewardClick = (visualId: string, rewardId: number, e: React.MouseEvent<HTMLDivElement>) => {
+    setFallingRewards(prev => prev.filter(r => r.visualId !== visualId));
+    onRewardClick(rewardId, e);
   };
+
+  useEffect(() => {
+    const interval = setInterval(spawnFallingReward, 1000 / speedDrop);
+    return () => clearInterval(interval);
+  }, [rewards, speedDrop]);
 
   return (
     <div className="relative w-full h-full flex justify-center px-4">
       <div
         ref={gridRef}
-        className="relative w-full max-w-[700px] h-[65vh] p-4 rounded-xl overflow-hidden"
+        className="relative w-full max-w-[700px] h-[65vh] p-4 overflow-hidden"
       >
-        {/* Bintang-bintang jatuh */}
         {fallingRewards.map((reward) => (
           <div
-            key={reward.id}
+            key={reward.visualId}
             className="absolute w-8 h-8 z-50"
             style={{
               left: `${reward.left}%`,
               animation: `fall ${reward.duration}s linear`,
             }}
-            onClick={() => handleFallingRewardClick(reward.id, reward.value)}
+            onClick={(e) => handleFallingRewardClick(reward.visualId, reward.rewardId, e)}
           >
-            <div className="diamond w-8 h-8" />
+            <div className="diamond " />
           </div>
         ))}
       </div>

@@ -30,14 +30,6 @@
   animation: pulse 2s infinite;
 }
 
-.text-outline {
-  text-shadow:
-    -1px -1px 0 #000,
-     1px -1px 0 #000,
-    -1px  1px 0 #000,
-     1px  1px 0 #000;
-}
-
 @keyframes fall {
   0% {
     top: -10%;
@@ -51,19 +43,20 @@
   }
 }
 
-@keyframes shimmer {
+@keyframes wind-suction {
   0% {
-    transform: translateX(-100%) skewX(-12deg);
+    transform: translateY(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
   }
   100% {
-    transform: translateX(200%) skewX(-12deg);
+    transform: translateY(100vh);
+    opacity: 0;
   }
 }
 
-.animate-bounce-up-fade {
-  animation: bounce-up-fade 1.5s ease-out forwards;
-}
-
-.animate-shimmer {
-  animation: shimmer 2s infinite;
+.animate-wind-suction {
+  animation: wind-suction linear infinite;
 }
