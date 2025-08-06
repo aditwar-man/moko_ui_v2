@@ -43,6 +43,29 @@
   }
 }
 
+@keyframes blinkNeon {
+  0% {
+    transform: scale(1);
+    background-color: transparent;
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    background-color: rgba(255, 255, 0, 0.3); /* kilat kuning */
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    background-color: transparent;
+    opacity: 1;
+  }
+}
+
+.blink-neon {
+  animation: blinkNeon 0.4s ease-out 1;
+  border-radius: 0.5rem;
+}
+
 @keyframes wind-suction {
   0% {
     transform: translateY(0);

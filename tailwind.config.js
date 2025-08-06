@@ -30,11 +30,22 @@ export default {
           '0%': { transform: 'translateY(0)' },
           '100%': { transform: 'translateY(100vh)' },
         },
+        spiralSmoke: {
+          '0%': {
+            transform: 'translateY(0) scale(1)',
+            opacity: '0.8',
+          },
+          '100%': {
+            transform: 'translateY(-80px) scale(1.2)',
+            opacity: '0',
+          },
+        },
       },
       animation: {
         fall: 'fall linear infinite',
         'bounce-up-fade': 'bounce-up-fade 1.5s ease-out forwards', // 👈 Tambahan
         'wind-line': 'wind-line linear infinite',
+        spiralSmoke: 'spiralSmoke 4s ease-in-out infinite',
       },
     },
   },

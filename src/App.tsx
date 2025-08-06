@@ -1,10 +1,9 @@
-import React from 'react';
+import {useRef} from 'react';
 import Header from './components/Header';
 import RewardGrid from './components/RewardGrid';
 import BoosterCards from './components/BoosterCards';
 import FloatingCoins from './components/FloatingCoins';
 import { useGameState } from './hooks/useGameState';
-import WindEffect from './components/WindEffect';
 
 function App() {
   const {
@@ -41,6 +40,8 @@ function App() {
     setActiveTab(tab);
   };
 
+  const totalCoinRef = useRef<HTMLDivElement>(null);
+
   return (
     <div className="relative w-screen h-screen overflow-hidden">
       {/* Background Image */}
@@ -54,6 +55,7 @@ function App() {
         {/* Header */}
         <Header
           totalCoins={totalCoins}
+          totalCoinRef={totalCoinRef}
           totalStars={totalStars}
           currentLevelStars={currentLevelStars}
           progressPercent={progressPercent}
@@ -61,7 +63,7 @@ function App() {
           onToggleDropdown={handleToggleDropdown}
           onNavigate={handleNavigate}
         />
-
+        
         {/* Main Game Area */}
         <div className="flex-1 flex flex-col justify-between">
           {activeTab === 'earn' && (
@@ -102,9 +104,10 @@ function App() {
             </div>
           )}
         </div>
-
+        
         {/* Booster Cards */}
         {activeTab === 'earn' && (
+          
           <div className="fixed bottom-4 left-0 w-full flex justify-center gap-4 z-50 px-4">
             <BoosterCards
               autoCollectorActive={autoCollectorActive}
@@ -126,7 +129,20 @@ function App() {
         {/* Floating Coins Animation */}
         <FloatingCoins
           coins={floatingCoins}
-          onAnimationComplete={removeFloatingCoin}
+          onAnimationComplete={(id) => {
+            removeFloatingCoin(id);
+
+            if (totalCoinRef.current) {
+              const el = totalCoinRef.current;
+              el.classList.add("blink-neon");
+
+              // Hapus efek setelah selesai
+              setTimeout(() => {
+                el.classList.remove("blink-neon");
+              }, 700); // sedikit lebih lama dari 0.6s animasi
+            }
+          }}
+          targetRef={totalCoinRef}
         />
       </div>
     </div>

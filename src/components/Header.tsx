@@ -1,8 +1,10 @@
 import React from 'react';
+import {useRef} from 'react';
 import { Menu, X } from 'lucide-react';
 
 interface HeaderProps {
   totalCoins: number;
+  totalCoinRef: React.RefObject<HTMLDivElement>;
   totalStars: number;
   currentLevelStars: number;
   progressPercent: number;
@@ -13,6 +15,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({
   totalCoins,
+  totalCoinRef,
   totalStars,
   currentLevelStars,
   progressPercent,
@@ -33,13 +36,13 @@ const Header: React.FC<HeaderProps> = ({
       <div className="flex justify-between items-center">
         
         {/* Coins */}
-        <div className="flex items-center gap-2 bg-gray-800 rounded-full px-2 py-1">
+        <div className="flex items-center gap-2 bg-shadow rounded-full px-2 py-1">
           <img
               src="/bintang.png"
               alt="Moko"
               className="w-6 h-6 object-contain"
             />
-          <span className="text-white font-bold text-sm leading-none">
+          <span ref={totalCoinRef} className="text-white font-bold text-sm leading-none">
             {totalCoins.toLocaleString()}
           </span>
           <span className="text-white font-bold text-sm leading-none">/ 100,000</span>
@@ -47,7 +50,7 @@ const Header: React.FC<HeaderProps> = ({
 
         {/* Stars + Menu */}
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-2 bg-gray-800 rounded-full px-2 py-1">
+          <div className="flex items-center gap-2 bg-shadow rounded-full px-2 py-1">
             <img
               src="/icon_moko.png"
               alt="Moko"
@@ -61,7 +64,7 @@ const Header: React.FC<HeaderProps> = ({
 
           <button
             onClick={onToggleDropdown}
-            className="bg-blue-950 rounded-full p-2 hover:bg-black/30 transition-colors"
+            className="bg-neutral-400 rounded-full p-2 hover:bg-black/30 transition-colors"
           >
             {showDropdown ? (
               <X className="w-6 h-6 text-white" />
