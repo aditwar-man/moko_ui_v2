@@ -70,7 +70,7 @@ const AnimatedCoin: React.FC<{
   return (
     <div
       ref={coinRef}
-      className="absolute text-yellow-400 font-bold text-lg transition-all duration-700 ease-in-out"
+      className="absolute text-white font-bold text-lg transition-all duration-700 ease-in-out"
       style={{
         left: coin.x,
         top: coin.y,

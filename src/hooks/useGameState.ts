@@ -126,6 +126,8 @@ export const useGameState = () => {
         if (coinsToAdd > 0) {
           setTotalCoins(prev => prev + coinsToAdd);
         }
+      } else {
+        setAutoCollectorActive(false)
       }
 
       if (speedDropActive && speedDropTimeLeft > 0) {
@@ -173,7 +175,7 @@ export const useGameState = () => {
     checkLevelUp();
   }, [checkLevelUp]);
 
-  const collectReward = useCallback((id: number, event?: React.MouseEvent) => {
+  const collectReward = useCallback((id: number, event?: React.MouseEvent | null) => {
     const randomReward = rewards[Math.floor(Math.random() * rewards.length)];
     
     const actualValue = Math.floor(randomReward.value * boosterMultiplier);

@@ -69,9 +69,11 @@ function App() {
           {activeTab === 'earn' && (
             <div className='mt-4'>
               <RewardGrid
+                coinTargetRef={totalCoinRef}
                 rewards={rewards}
                 speedDrop={speedDuration}
                 onRewardClick={(id, event) => collectReward(id, event)}
+                autoCollect={autoCollectorActive}
               />
             </div>
           )}
