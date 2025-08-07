@@ -159,7 +159,6 @@ export const useTelegramIntegration = () => {
       // Fallback to localStorage
       try {
         localStorage.setItem('tg_game_progress', JSON.stringify(data));
-        console.log('✅ Game progress saved to localStorage');
       } catch (error) {
         console.error('Failed to save to localStorage:', error);
       }

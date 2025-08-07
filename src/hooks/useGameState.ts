@@ -131,7 +131,7 @@ export const useGameState = () => {
       }
 
       if (speedDropActive && speedDropTimeLeft > 0) {
-        setSpeedDuration(2)
+        setSpeedDuration(2.5)
         setSpeedDropTimeLeft(prev => {
           const newTime = Math.max(0, prev - deltaTime);
           if (newTime <= 0) {

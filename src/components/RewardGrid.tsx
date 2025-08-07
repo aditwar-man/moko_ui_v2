@@ -67,6 +67,12 @@ const RewardGrid: React.FC<RewardGridProps> = ({
 
     setTimeout(() => {
       floating.remove();
+
+      if (coinTargetRef.current) {
+        const targetEl = coinTargetRef.current;
+        targetEl.classList.add("blink-neon");
+        setTimeout(() => targetEl.classList.remove("blink-neon"), 600);
+      }
     }, 600);
   };
 
@@ -90,7 +96,7 @@ const RewardGrid: React.FC<RewardGridProps> = ({
     setFallingRewards(prev => [...prev, newReward]);
 
     if (autoCollect) {
-      const collectDelay = Math.min(duration * 800, 1000);
+      // const collectDelay = Math.min(800, 1000);
       setAutoCollectingIds(prev => new Set(prev).add(visualId));
 
       setTimeout(() => {
@@ -99,13 +105,7 @@ const RewardGrid: React.FC<RewardGridProps> = ({
 
         onRewardClick(reward.id, null);
         removeReward(visualId);
-
-        if (coinTargetRef.current) {
-          const targetEl = coinTargetRef.current;
-          targetEl.classList.add("blink-neon");
-          setTimeout(() => targetEl.classList.remove("blink-neon"), 600);
-        }
-      }, collectDelay);
+      }, 1860);
     }
 
     setTimeout(() => removeReward(visualId), duration * 1000);
@@ -118,7 +118,21 @@ const RewardGrid: React.FC<RewardGridProps> = ({
   }, [autoCollectingIds, removeReward, onRewardClick]);
 
   useEffect(() => {
-    const interval = setInterval(spawnFallingReward, 1000 / speedDrop);
+     let interval: ReturnType<typeof setInterval>;
+
+    // if (speedDrop > 1) {
+    //   interval = setInterval(() => {
+    //     const spawnCount = Math.floor(Math.random() * 3) + 3; // 3–5 bintang
+    //     for (let i = 0; i < spawnCount; i++) {
+    //       setTimeout(() => {
+    //         spawnFallingReward();
+    //       }, i * 300);
+    //     }
+    //   }, 500); // spawn batch setiap 600ms
+    // } else {
+    // }
+    interval = setInterval(spawnFallingReward, 1000 / speedDrop);
+
     return () => clearInterval(interval);
   }, [spawnFallingReward, speedDrop]);
 
