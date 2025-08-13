@@ -1,5 +1,4 @@
-import React from 'react';
-import {useRef} from 'react';
+import React, { useRef, useLayoutEffect, useState } from 'react';
 import { Menu, X } from 'lucide-react';
 
 interface HeaderProps {
@@ -11,37 +10,42 @@ interface HeaderProps {
   showDropdown: boolean;
   onToggleDropdown: () => void;
   onNavigate: (tab: string) => void;
+  footerRef: React.RefObject<HTMLDivElement>; // ⬅ tambahan
 }
 
 const Header: React.FC<HeaderProps> = ({
   totalCoins,
   totalCoinRef,
   totalStars,
-  currentLevelStars,
-  progressPercent,
   showDropdown,
   onToggleDropdown,
-  onNavigate
+  onNavigate,
+  footerRef
 }) => {
   const navItems = [
-    { id: 'tasks', label: '📝 Tasks', description: 'Complete daily tasks' },
-    { id: 'friends', label: '👥 Friends', description: 'Invite friends for rewards' },
-    { id: 'upgrade', label: '📈 Upgrade', description: 'Upgrade your tools' },
-    { id: 'profile', label: '👤 Profile', description: 'View your stats' },
+    { id: 'leaderboard', label: 'LEADERBOARD', icon: '/icons/leaderboard.svg' },
+    { id: 'upgrade', label: 'UPGRADE', icon: '/icons/upgrade.svg' },
+    { id: 'tg_news', label: 'TC NEWS', icon: '/icons/tg_news.svg' },
+    { id: 'friends', label: 'FRIENDS', icon: '/icons/friends.svg' },
   ];
+
+  const [dropdownHeight, setDropdownHeight] = useState<number>(0);
+
+  useLayoutEffect(() => {
+    if (footerRef.current) {
+      const footerTop = footerRef.current.getBoundingClientRect().top;
+      console.log(footerRef)
+      setDropdownHeight(footerTop - 70); // padding 20px
+    }
+  }, [showDropdown, footerRef]);
 
   return (
     <div className="bg-shadow p-4 shadow-lg relative z-50">
-      {/* Top Header: Stats & Menu */}
+      {/* Top Header */}
       <div className="flex justify-between items-center">
-        
         {/* Coins */}
         <div className="flex items-center gap-2 bg-shadow rounded-full px-2 py-1">
-          <img
-              src="/bintang.png"
-              alt="Moko"
-              className="w-6 h-6 object-contain"
-            />
+          <img src="/bintang.png" alt="Star" className="w-6 h-6 object-contain" />
           <span ref={totalCoinRef} className="text-white font-bold text-sm leading-none">
             {totalCoins.toLocaleString()}
           </span>
@@ -51,17 +55,9 @@ const Header: React.FC<HeaderProps> = ({
         {/* Stars + Menu */}
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-2 bg-shadow rounded-full px-2 py-1">
-            <img
-              src="/icon_moko.png"
-              alt="Moko"
-              className="w-6 h-6 object-contain"
-            />
-            <span className="text-white font-bold text-sm text-base">
-              {/* {totalStars.toLocaleString()} */}
-              1M
-            </span>
+            <img src="/icon_moko.png" alt="Moko" className="w-6 h-6 object-contain" />
+            <span className="text-white font-bold text-sm">1M</span>
           </div>
-
           <button
             onClick={onToggleDropdown}
             className="bg-neutral-400 rounded-full p-2 hover:bg-black/30 transition-colors"
@@ -77,29 +73,51 @@ const Header: React.FC<HeaderProps> = ({
 
       {/* Dropdown Navigation */}
       {showDropdown && (
-        <div className="absolute top-full left-4 right-4 mt-2 bg-gray-900/95 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-700 z-50">
-          <div className="p-4 space-y-2">
-            {navItems.map((item) => (
+        <div
+          className="fixed left-4 right-4 top-[70px] bg-gradient-to-b from-[#b9dbf9] to-[#305ea8] rounded-2xl shadow-2xl border z-[100] border-8  border-[#305ea8] animate-slideDown p-4 border"
+          style={{ height: dropdownHeight }}
+        >
+          {/* Moko Image + Username */}
+          {/* <div className="flex flex-col items-center -mt-10 mb-4 relative z-10">
+            <img
+              src="/icon_moko.png"
+              alt="Moko"
+              className="w-24 h-24 object-contain drop-shadow-lg"
+            />
+            <span className="text-[14px] font-bold text-color-[#305ea8] mt-1">
+              @Lalapopo
+            </span>
+          </div> */}
+
+          {/* Grid Menu + Wallet */}
+          <div className="grid grid-cols-2 gap-2">
+            {navItems.slice(0, 4).map((item) => (
               <button
                 key={item.id}
                 onClick={() => {
                   onNavigate(item.id);
                   onToggleDropdown();
                 }}
-                className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-colors text-left"
+                className="flex flex-col items-center justify-center p-5 m-1 rounded-xl bg-white shadow hover:scale-105 transition-transform border-4 border-[#305ea8]"
               >
-                <span className="text-2xl">{item.label.split(' ')[0]}</span>
-                <div>
-                  <div className="text-white font-medium">
-                    {item.label.substring(2)}
-                  </div>
-                  <div className="text-gray-400 text-sm">{item.description}</div>
-                </div>
+                <img src={item.icon} alt={item.label} className="w-10 h-10 object-contain mb-2" />
+                <span className="text-[13px] font-bold text-gray-800">{item.label}</span>
               </button>
             ))}
+
+            {/* Wallet Connected */}
+            <button
+              className="col-span-2 flex items-center justify-center p-4 rounded-xl bg-green-100 border-4 border-[#305ea8] shadow hover:scale-105 transition-transform"
+            >
+              <span className="text-[14px] font-bold text-green-800">
+                Wallet Connected
+              </span>
+            </button>
           </div>
         </div>
       )}
+
+
     </div>
   );
 };

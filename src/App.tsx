@@ -42,6 +42,8 @@ function App() {
 
   const totalCoinRef = useRef<HTMLDivElement>(null);
 
+  const footerRef = useRef<HTMLDivElement>(null);
+
   return (
     <div className="relative w-screen h-screen overflow-hidden">
       {/* Background Image */}
@@ -62,6 +64,7 @@ function App() {
           showDropdown={showDropdown}
           onToggleDropdown={handleToggleDropdown}
           onNavigate={handleNavigate}
+          footerRef={footerRef}
         />
         
         {/* Main Game Area */}
@@ -110,7 +113,7 @@ function App() {
         {/* Booster Cards */}
         {activeTab === 'earn' && (
           
-          <div className="fixed bottom-4 left-0 w-full flex justify-center gap-4 z-50 px-4">
+          <div ref={footerRef} className="fixed bottom-4 left-0 w-full flex justify-center gap-4 z-50 px-4">
             <BoosterCards
               autoCollectorActive={autoCollectorActive}
               autoCollectorTimeLeft={autoCollectorTimeLeft}

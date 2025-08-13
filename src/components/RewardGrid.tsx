@@ -146,7 +146,7 @@ const RewardGrid: React.FC<RewardGridProps> = ({
           <div
             id={reward.visualId}
             key={reward.visualId}
-            className="absolute w-8 h-8 z-50"
+            className="absolute w-8 h-8"
             style={{
               left: `${reward.left}%`,
               animation: `fall ${reward.duration}s linear`,
