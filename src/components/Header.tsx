@@ -44,7 +44,7 @@ const Header: React.FC<HeaderProps> = ({
       {/* Top Header */}
       <div className="flex justify-between items-center">
         {/* Coins */}
-        <div className="flex items-center gap-2 bg-shadow rounded-full px-2 py-1">
+        <div className="flex items-center gap-2 bg-[#ce8539] rounded-full px-2 py-1">
           <img src="/bintang.png" alt="Star" className="w-6 h-6 object-contain" />
           <span ref={totalCoinRef} className="text-white font-bold text-sm leading-none">
             {totalCoins.toLocaleString()}
@@ -54,13 +54,13 @@ const Header: React.FC<HeaderProps> = ({
 
         {/* Stars + Menu */}
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-2 bg-shadow rounded-full px-2 py-1">
+          <div className="flex items-center gap-2 bg-[#ce8539] rounded-full px-2 py-1">
             <img src="/icon_moko.png" alt="Moko" className="w-6 h-6 object-contain" />
             <span className="text-white font-bold text-sm">1M</span>
           </div>
           <button
             onClick={onToggleDropdown}
-            className="bg-neutral-400 rounded-full p-2 hover:bg-black/30 transition-colors"
+            className="bg-[#ce8539] rounded-full p-2 hover:bg-black/30 transition-colors"
           >
             {showDropdown ? (
               <X className="w-6 h-6 text-white" />
@@ -74,7 +74,7 @@ const Header: React.FC<HeaderProps> = ({
       {/* Dropdown Navigation */}
       {showDropdown && (
         <div
-          className="fixed left-4 right-4 top-[70px] bg-gradient-to-b from-[#b9dbf9] to-[#305ea8] rounded-2xl shadow-2xl border z-[100] border-8  border-[#305ea8] animate-slideDown p-4 border"
+          className="fixed left-4 right-4 top-[70px] bg-gradient-to-b from-[#243d69] to-[#305ea8] rounded-2xl shadow-2xl z-[100] animate-slideDown p-4"
           style={{ height: dropdownHeight }}
         >
           {/* Moko Image + Username */}
@@ -98,7 +98,7 @@ const Header: React.FC<HeaderProps> = ({
                   onNavigate(item.id);
                   onToggleDropdown();
                 }}
-                className="flex flex-col items-center justify-center p-5 m-1 rounded-xl bg-white shadow hover:scale-105 transition-transform border-4 border-[#305ea8]"
+                className="flex flex-col items-center justify-center p-5 m-1 rounded-xl bg-white shadow hover:scale-105 transition-transform border-4 border-[#c4cef2]"
               >
                 <img src={item.icon} alt={item.label} className="w-10 h-10 object-contain mb-2" />
                 <span className="text-[13px] font-bold text-gray-800">{item.label}</span>
@@ -107,8 +107,9 @@ const Header: React.FC<HeaderProps> = ({
 
             {/* Wallet Connected */}
             <button
-              className="col-span-2 flex items-center justify-center p-4 rounded-xl bg-green-100 border-4 border-[#305ea8] shadow hover:scale-105 transition-transform"
+              className="col-span-2 flex items-center justify-center p-2 rounded-xl bg-green-100 border-4 border-[#305ea8] shadow hover:scale-105 transition-transform"
             >
+              <img src="/icons/wallet.svg" alt="" className="w-10 h-10 object-contain mr-2" />
               <span className="text-[14px] font-bold text-green-800">
                 Wallet Connected
               </span>

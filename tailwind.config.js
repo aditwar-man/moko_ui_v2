@@ -4,7 +4,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        baloo: ['"Baloo 2"', "cursive"],
+        // baloo: ['"Baloo 2"', "cursive"],
+        quicksand: ['"Quicksand"', "cursive"]
       },
       keyframes: {
         fall: {

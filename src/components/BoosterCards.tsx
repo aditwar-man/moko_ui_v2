@@ -40,7 +40,7 @@ const BoosterCard: React.FC<BoosterCardProps> = ({
       </div>
 
       {/* Title */}
-      <div className="text-xs font-bold text-black bg-white/80 rounded-full px-3 py-[2px] shadow-inner">
+      <div className="text-xs  text-quick font-bold text-black bg-white/80 rounded-full px-3 py-[2px] shadow-inner">
         {title}
       </div>
 
@@ -84,7 +84,7 @@ const BoosterCards: React.FC<BoosterCardsProps> = ({
   const boosters = [
     {
       id: 'auto-collector',
-      title: 'Auto Collect',
+      title: 'AUTO',
       icon: <MousePointerClick className="w-full h-full" color="#facc15" strokeWidth={2.5} />,
       time: autoCollectorActive ? formatTime(autoCollectorTimeLeft) : '',
       isActive: autoCollectorActive,
@@ -93,7 +93,7 @@ const BoosterCards: React.FC<BoosterCardsProps> = ({
     },
     {
       id: 'shard-multiplier',
-      title: 'Multiplier',
+      title: 'MULTIPLIER',
       icon: (
         <div className="text-xl font-black text-purple-600 drop-shadow-md">
           {multiplierValue}x
@@ -106,7 +106,7 @@ const BoosterCards: React.FC<BoosterCardsProps> = ({
     },
     {
       id: 'conveyor-booster',
-      title: 'Faster Drops',
+      title: 'FASTER',
       icon: <FastForward className="w-full h-full" color="#38bdf8" strokeWidth={2.5} />,
       time: speedDropActive ? formatTime(speedDropTimeLeft) : '',
       isActive: speedDropActive,

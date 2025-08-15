@@ -66,6 +66,13 @@
   border-radius: 0.5rem;
 }
 
+.text-quick {
+  font-family: "Quicksand", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
 @keyframes wind-suction {
   0% {
     transform: translateY(0);
